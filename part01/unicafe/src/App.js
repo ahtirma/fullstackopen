@@ -10,9 +10,11 @@ const Button = (props) => {
 const StatisticsLine = (props) => {
   const {text, value} = props;
   return (
-    <p>
-      {text} {value}
-    </p>
+    <tr>
+      <td>
+        {text} {value}
+      </td>
+    </tr>
   )
 }
 
@@ -35,12 +37,16 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      <StatisticsLine text='good' value={good} />
-      <StatisticsLine text='neutral' value={neutral} />
-      <StatisticsLine text='bad' value={bad} />
-      <StatisticsLine text='all' value={all} />
-      <StatisticsLine text='average' value={averageScoreFeedback()} />
-      <StatisticsLine text='positive' value={positiveFeedbackPercentage()+' %'} />
+      <table>
+        <tbody>
+          <StatisticsLine text='good' value={good} />
+          <StatisticsLine text='neutral' value={neutral} />
+          <StatisticsLine text='bad' value={bad} />
+          <StatisticsLine text='all' value={all} />
+          <StatisticsLine text='average' value={averageScoreFeedback()} />
+          <StatisticsLine text='positive' value={positiveFeedbackPercentage()+' %'} />
+        </tbody>
+      </table>
     </div>  
   )
 }
@@ -71,20 +77,17 @@ const App = () => {
   }
 
   const averageScoreFeedback = () => {
-    let average = 0;
     let sum = 0;
 
     feedbackPoints.forEach((value) => {
       sum = sum + value;
     })
-    average = sum/all;
     
-    return average;
+    return (sum/all);
   }
 
   const positiveFeedbackPercentage = () => {
-    const percentage = ((good/all)*100);
-    return percentage;
+    return ((good/all)*100);
   }
 
   return(
