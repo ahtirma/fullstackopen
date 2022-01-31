@@ -28,11 +28,19 @@ const Content = ({course}) => {
 )};
 
 const Total = ({course}) => {
-  const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises;
+  const parts = course.parts;
+  
+  const exercisesArray = parts.map(part => part.exercises);
+  console.log(exercisesArray);
+
+  const total = exercisesArray.reduce(
+    (previousValue, currentValue) => previousValue + currentValue
+  );
+
   return(
     <p>
       <b>
-      Total of {sum} exercises
+      Total of {total} exercises
       </b>
     </p>
 )};
