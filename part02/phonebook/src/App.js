@@ -2,13 +2,21 @@ import React, {useState} from "react";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    {name: 'Arto Hellas'}
+    {
+      name: 'Arto Hellas',
+      phoneNumber: '040-1234567',
+    }
   ]);
   const [newName, setNewName] = useState('');
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   } 
+
+  const handlePhoneNumberChange = (event) => {
+    setNewPhoneNumber(event.target.value);
+  }
 
   const doesNameAlreadyExist = () => {
     return persons.find(person => {
@@ -18,15 +26,17 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    
+
     if(doesNameAlreadyExist()) {
       alert(`${newName} is already added to phonebook`);
     } else {
       const personObject = {
         name: newName,
+        phoneNumber: newPhoneNumber,
       }
       setPersons(persons.concat(personObject));
       setNewName('');
+      setNewPhoneNumber('');
     }
   }
 
@@ -38,6 +48,9 @@ const App = () => {
           name: <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
+          number: <input value={newPhoneNumber} onChange={handlePhoneNumberChange} />
+        </div>
+        <div>
           <button type="submit">ADD</button>
         </div>
       </form>
@@ -46,7 +59,7 @@ const App = () => {
       <ul>
         {persons.map(person => {
           return (
-            <li key={person.name}>{person.name}</li>
+            <li key={person.name}>{person.name} {person.phoneNumber}</li>
           )
         })}
       </ul>
