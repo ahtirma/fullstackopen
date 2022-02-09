@@ -12,7 +12,10 @@ const StatisticsLine = (props) => {
   return (
     <tr>
       <td>
-        {text} {value}
+        {text}
+      </td>
+      <td>
+        {value}
       </td>
     </tr>
   )
@@ -23,31 +26,30 @@ const Statistics = (props) => {
     good, 
     neutral, 
     bad,
-    all, 
-    averageScoreFeedback, 
-    positiveFeedbackPercentage
+    all,
+    average,
+    positiveFeedback,
   } = props;
-
-  if(all === 0) {
+  
+  if(all) {
     return (
       <div>
-        <p>No feedback given!</p>
-      </div>
+        <table>
+          <tbody>
+            <StatisticsLine text='good' value={good} />
+            <StatisticsLine text='neutral' value={neutral} />
+            <StatisticsLine text='bad' value={bad} />
+            <StatisticsLine text='all' value={all} />
+            <StatisticsLine text='average' value={average} />
+            <StatisticsLine text='positive feedback' value={`${positiveFeedback} %`} />
+          </tbody>
+        </table>
+      </div>  
     )
   }
+  
   return (
-    <div>
-      <table>
-        <tbody>
-          <StatisticsLine text='good' value={good} />
-          <StatisticsLine text='neutral' value={neutral} />
-          <StatisticsLine text='bad' value={bad} />
-          <StatisticsLine text='all' value={all} />
-          <StatisticsLine text='average' value={averageScoreFeedback()} />
-          <StatisticsLine text='positive' value={positiveFeedbackPercentage()+' %'} />
-        </tbody>
-      </table>
-    </div>  
+    <p>No Feedback given</p>
   )
 }
 
@@ -55,39 +57,21 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
-  const [all, setAll] = useState(0);
-  const [feedbackPoints, setFeedBackPoints] = useState([]);
+
+  const all = good + neutral + bad;
+  const average = (good - bad) / all;
+  const positiveFeedback = (good / all) * 100;
 
   const handleGoodFeedback = () => {
     setGood(good + 1);
-    setAll(all + 1);
-    setFeedBackPoints(feedbackPoints.concat(1));
   }
 
   const handleNeutralFeedback = () => {
     setNeutral(neutral + 1);
-    setAll(all + 1);
-    setFeedBackPoints(feedbackPoints.concat(0));
   }
 
   const handleBadFeedback = () => {
     setBad(bad + 1);
-    setAll(all + 1);
-    setFeedBackPoints(feedbackPoints.concat(-1));
-  }
-
-  const averageScoreFeedback = () => {
-    let sum = 0;
-
-    feedbackPoints.forEach((value) => {
-      sum = sum + value;
-    })
-    
-    return (sum/all);
-  }
-
-  const positiveFeedbackPercentage = () => {
-    return ((good/all)*100);
   }
 
   return(
@@ -103,9 +87,9 @@ const App = () => {
         good={good} 
         neutral={neutral}
         bad={bad} 
-        all={all} 
-        averageScoreFeedback={averageScoreFeedback} 
-        positiveFeedbackPercentage={positiveFeedbackPercentage} 
+        all={all}
+        average={average}
+        positiveFeedback={positiveFeedback}
       />
     </div>
   )
