@@ -1,6 +1,6 @@
 import React from "react";
 
-const PersonDetails = ({person}) => <li>{person.name} {person.phoneNumber}</li>;
+const PersonDetails = ({person}) => <li>{person.name} {person.number}</li>;
 
 const Persons = ({persons}) => {
     return (
