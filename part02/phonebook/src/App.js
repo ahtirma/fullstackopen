@@ -5,10 +5,27 @@ const App = () => {
     {
       name: 'Arto Hellas',
       phoneNumber: '040-1234567',
-    }
+      id: 1,
+    },
+    {
+      name: 'Ada Lovelace',
+      phoneNumber: '39-44-5323523',
+      id: 2,
+    },
+    {
+      name: 'Dan Abramov',
+      phoneNumber: '12-43-234345',
+      id: 3,
+    },
+    {
+      name: 'Mary Poppendieck',
+      phoneNumber: '39-23-6423122',
+      id: 4,
+    },
   ]);
   const [newName, setNewName] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [searchFilter, setSearchFilter] = useState('');
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -17,6 +34,15 @@ const App = () => {
   const handlePhoneNumberChange = (event) => {
     setNewPhoneNumber(event.target.value);
   }
+
+  const handleSearchFilterChange = (event) => {
+    setSearchFilter(event.target.value);
+  }
+
+  const personsToShow = searchFilter ? persons.filter(person => {
+    return person.name.toLowerCase() === searchFilter.toLowerCase();
+  }) : persons;
+  
 
   const doesNameAlreadyExist = () => {
     return persons.find(person => {
@@ -33,6 +59,7 @@ const App = () => {
       const personObject = {
         name: newName,
         phoneNumber: newPhoneNumber,
+        id: persons.length + 1,
       }
       setPersons(persons.concat(personObject));
       setNewName('');
@@ -43,6 +70,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        Filter shown with <input value={searchFilter} onChange={handleSearchFilterChange} />
+      </div>
+      <h2>Add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
@@ -57,9 +88,9 @@ const App = () => {
 
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => {
+        {personsToShow.map(person => {
           return (
-            <li key={person.name}>{person.name} {person.phoneNumber}</li>
+            <li key={person.id}>{person.name} {person.phoneNumber}</li>
           )
         })}
       </ul>
