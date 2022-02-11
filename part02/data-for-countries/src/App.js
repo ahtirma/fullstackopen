@@ -1,46 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios';
-
-const CountriesToShow = (props) => {
-  const {countries} = props;
-
-  if(countries.length > 10) {
-    return (
-      <p>Too many matches, specify another filter.</p>
-    )
-  }
-  if(countries.length === 1) {
-    const country = countries[0];
-    
-    return(
-      <div>
-        <h2>{country.name.common}</h2>
-        <p>Capital {country.capital}</p>
-        <p>Population {country.population}</p>
-        
-        <h3>Languages</h3>
-        <ul>
-          {Object.keys(country.languages).map(key => {
-            return (
-              <li key={key}>{country.languages[key]}</li>
-            )
-          })}
-          
-        </ul>
-        <img src={country.flags.png} alt={country.name.common} />
-      </div>
-    )
-  }
-  return (
-    <ul>
-      {countries.map(country => {
-        return (
-          <li key={country.name.common}>{country.name.common}</li>
-        )
-      })}
-    </ul>
-  )
-}
+import CountriesToShow from "./components/CountriesToShow";
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
