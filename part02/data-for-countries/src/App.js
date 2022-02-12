@@ -19,12 +19,10 @@ const App = () => {
   }
 
   const filterCountries = () => {
-    console.log(searchQuery);
     if(searchQuery.length){
-      const filteredCountries = countries.filter(country => {
+      return countries.filter(country => {
         return country.name.common.toLowerCase().match(searchQuery.toLowerCase());
       });
-      return filteredCountries;
     }
     return [];
   }

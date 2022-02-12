@@ -1,6 +1,7 @@
 import React from "react";
 import CountryDetails from "./CountryDetails";
 import DisplayCountry from "./DisplayCountry";
+import CityWeather from "./CityWeather";
 
 const CountriesToShow = ({countries}) => {
 
@@ -13,17 +14,16 @@ const CountriesToShow = ({countries}) => {
     if(countries.length === 1) {
       const country = countries[0];
       return(
-        <CountryDetails country={country} />
+        <>
+          <CountryDetails country={country} />
+          <CityWeather country={country} />
+        </>
       )
     }
 
     return (
       <div>
-        {countries.map(country => {
-          return (
-            <DisplayCountry key={country.name.common} country={country} />
-          )
-        })}
+        {countries.map(country => <DisplayCountry key={country.name.common} country={country} />)}
       </div>
     )
   }

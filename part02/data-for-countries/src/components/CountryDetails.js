@@ -14,9 +14,8 @@ const CountryDetails = ({country}) => {
                 <li key={key}>{country.languages[key]}</li>
               )
             })}
-            
           </ul>
-          <img src={country.flags.png} alt={country.name.common} />
+          <img src={country.flags.png} alt={country.name.common} width="200px" />
         </div>
     )    
 }
