@@ -61,6 +61,19 @@ const App = () => {
     }
   }
 
+  const removePerson = (id) => {
+    const person = persons.find(person => person.id === id);
+    const confirmation = window.confirm(`Delete ${person.name} ?`);
+    
+    if(confirmation) {
+      personsService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -76,7 +89,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} removePerson={removePerson} />
     </div>
   )
 }
