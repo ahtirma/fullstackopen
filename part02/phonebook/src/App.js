@@ -43,6 +43,7 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+    const url = 'http://localhost:3001/persons';
 
     if(doesNameAlreadyExist()) {
       alert(`${newName} is already added to phonebook`);
@@ -50,11 +51,14 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newPhoneNumber,
-        id: persons.length + 1,
       }
-      setPersons(persons.concat(personObject));
-      setNewName('');
-      setNewPhoneNumber('');
+      axios
+        .post(url, personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setNewPhoneNumber('');
+        })
     }
   }
 
