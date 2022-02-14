@@ -33,19 +33,32 @@ const App = () => {
   const personsToShow = searchFilter ? persons.filter(person => {
     return person.name.toLowerCase() === searchFilter.toLowerCase();
   }) : persons;
-  
 
-  const doesNameAlreadyExist = () => {
-    return persons.find(person => {
-      return person.name === newName
-    })
+  const findPerson = () => {
+    return persons.find(person => person.name === newName);
+  }
+  
+  const changePhoneNumber = (person) => {
+    const changedPerson = {...person, number: newPhoneNumber};
+    
+    personsService
+      .update(person.id, changedPerson)
+      .then(returnedPersonObj => {
+        setPersons(persons.map(p => p.id !== person.id ? p : returnedPersonObj)) ;
+        setNewName('');
+        setNewPhoneNumber('');
+      })
   }
 
   const addPerson = (event) => {
     event.preventDefault();
-    
-    if(doesNameAlreadyExist()) {
-      alert(`${newName} is already added to phonebook`);
+    const foundPerson = findPerson();
+
+    if(foundPerson) {
+      const confirmation = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      if(confirmation) {
+        changePhoneNumber(foundPerson);
+      }
     } else {
       const personObject = {
         name: newName,
