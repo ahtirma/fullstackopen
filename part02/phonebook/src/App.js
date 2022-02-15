@@ -11,6 +11,7 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
   const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState('info');
 
   useEffect(() => {
     personsService
@@ -39,6 +40,15 @@ const App = () => {
   const findPerson = () => {
     return persons.find(person => person.name === newName);
   }
+
+  const notifyUser = (messageType, message) => {
+    setMessageType(messageType);
+    setMessage(message);
+    setTimeout(
+      () => setMessage(null), 
+      5000
+    );
+  }
   
   const changePhoneNumber = (person) => {
     const changedPerson = {...person, number: newPhoneNumber};
@@ -47,8 +57,25 @@ const App = () => {
       .update(person.id, changedPerson)
       .then(returnedPersonObj => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPersonObj)) ;
-        setMessage(`The phone number for ${returnedPersonObj.name} is changed to ${returnedPersonObj.number}`);
-        setTimeout(() => setMessage(null), 5000);
+        notifyUser('info', `The phone number for ${returnedPersonObj.name} is changed to ${returnedPersonObj.number}`)
+        setNewName('');
+        setNewPhoneNumber('');
+      })
+      .catch(error => {
+        notifyUser('error', `Information of ${person.name} has already been removed from the server`)
+      })
+  }
+
+  const addPersonObject = () => {
+    const personObject = {
+      name: newName,
+      number: newPhoneNumber,
+    }
+    personsService
+      .create(personObject)
+      .then(returnedPersonObj => {
+        setPersons(persons.concat(returnedPersonObj));
+        notifyUser('info', `Added ${returnedPersonObj.name}`)
         setNewName('');
         setNewPhoneNumber('');
       })
@@ -64,22 +91,7 @@ const App = () => {
         changePhoneNumber(foundPerson);
       }
     } else {
-      const personObject = {
-        name: newName,
-        number: newPhoneNumber,
-      }
-      personsService
-        .create(personObject)
-        .then(returnedPersonObj => {
-          setPersons(persons.concat(returnedPersonObj));
-          setMessage(`Added ${returnedPersonObj.name}`);
-          setTimeout(
-            () => setMessage(null), 
-            5000
-          );
-          setNewName('');
-          setNewPhoneNumber('');
-        })
+      addPersonObject();
     }
   }
 
@@ -92,6 +104,10 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
+          notifyUser('info', `Information of ${person.name} has been removed from the server`);
+        })
+        .catch(error => {
+          notifyUser('error', `Information of ${person.name} has already been removed from the server`);
         })
     }
   }
@@ -99,7 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification messageType={messageType} message={message} />
       <SearchFilterComp value={searchFilter} onChange={handleSearchFilterChange} />
       
       <h2>Add a new</h2>
