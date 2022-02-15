@@ -3,12 +3,14 @@ import personsService from "./services/persons";
 import SearchFilterComp from "./components/SearchFilterComp";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personsService
@@ -45,6 +47,8 @@ const App = () => {
       .update(person.id, changedPerson)
       .then(returnedPersonObj => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPersonObj)) ;
+        setMessage(`The phone number for ${returnedPersonObj.name} is changed to ${returnedPersonObj.number}`);
+        setTimeout(() => setMessage(null), 5000);
         setNewName('');
         setNewPhoneNumber('');
       })
@@ -68,6 +72,11 @@ const App = () => {
         .create(personObject)
         .then(returnedPersonObj => {
           setPersons(persons.concat(returnedPersonObj));
+          setMessage(`Added ${returnedPersonObj.name}`);
+          setTimeout(
+            () => setMessage(null), 
+            5000
+          );
           setNewName('');
           setNewPhoneNumber('');
         })
@@ -90,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <SearchFilterComp value={searchFilter} onChange={handleSearchFilterChange} />
       
       <h2>Add a new</h2>
