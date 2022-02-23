@@ -62,7 +62,8 @@ const App = () => {
         setNewPhoneNumber('');
       })
       .catch(error => {
-        notifyUser('error', `Information of ${person.name} has already been removed from the server`)
+        console.log(error.response.data);
+        notifyUser('error', error.response.data.error);
       })
   }
 
@@ -78,6 +79,10 @@ const App = () => {
         notifyUser('info', `Added ${returnedPersonObj.name}`)
         setNewName('');
         setNewPhoneNumber('');
+      })
+      .catch(error => {
+        console.log(error.response.data);
+        notifyUser('error', error.response.data.error);
       })
   }
 
